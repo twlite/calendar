@@ -21,3 +21,16 @@ const calendar = new Calendar({
 
 console.log(calendar.create());
 ```
+
+## Deno
+
+```js
+import Calendar from "https://deno.land/x/calendar/mod.ts";
+
+const calendar = new Calendar({
+    year: 2020,
+    month: 4
+});
+
+console.log(calendar.create());
+```
