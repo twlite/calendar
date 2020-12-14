@@ -7,8 +7,8 @@ export interface CalendarOptions {
 
 export interface CalendarDaysData {
     row: number;
-    day: number;
-    name: string;
+    day?: number;
+    name?: string;
     holiday: boolean;
 }
 
@@ -20,6 +20,10 @@ export interface CalendarData {
     days: CalendarDaysData[];
     leapYear: boolean;
     leapMonth: boolean;
+}
+
+export interface createHTMLOptions {
+    includeStyles?: boolean;
 }
 
 class Calendar {
@@ -41,12 +45,12 @@ class Calendar {
         /**
          * Current year
          */
-        this.year = this._validate(options && options.year || new Date().getFullYear(), "number", "year");
+        this.year = this._validate(options && typeof options.year === "number" ? options.year : new Date().getFullYear(), "number", "year");
 
         /**
          * Current month
          */
-        this.month = this._validate(options && options.month || new Date().getMonth(), "number", "month");
+        this.month = this._validate(options && typeof options.month === "number" ? options.month : new Date().getMonth(), "number", "month");
 
         /**
          * Days format
@@ -149,6 +153,13 @@ class Calendar {
                         holiday: this.holidays.some(x => x === j)
                     });
                     day++;
+                } else {
+                    days.push({
+                        row: i,
+                        day: null,
+                        name: null,
+                        holiday: false
+                    })
                 }
             }
 
@@ -164,6 +175,51 @@ class Calendar {
             leapMonth: this.length === 29,
             leapYear: this.leap
         } as CalendarData;
+    }
+
+    public toHTML(options?: createHTMLOptions): string {
+        if (!options) options = {};
+        const data = this.create();
+        const cap = `<caption>${data.monthName} ${data.year}</caption>`;
+        let heading = "";
+        let days = "";
+        const ROWS = [...new Set(data.days.map(m => m.row))];
+
+        for (let i = 0; i < 7; i++) {
+            heading += `<th class="${this.days[i].toLowerCase()}">${this.days[i]}</th>`;
+        }
+
+        ROWS.forEach(index => {
+            let tempr = "";
+            const row = data.days.filter(x => x.row === index);
+            for (let i = 0; i < row.length; i++) {
+                tempr += `<td class="day${row[i].holiday ? " holiday" : ""}">${row[i].day || ""}</td>`;
+            }
+            days += `<tr>${tempr}</tr>`;
+        });
+
+        const style = `
+        <style>
+            table,
+            th,
+            td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+        
+            th,
+            td {
+                padding: 5px;
+                text-align: left;
+            }
+
+            .holiday {
+                color: #db0000;
+            }
+        </style>
+        `;
+
+        return `${!!options.includeStyles ? style : ""}<table width="100%">${cap}<thead><tr>${heading}</tr></thead><tbody>${days}</tbody></table>`;
     }
 
     /**
@@ -208,10 +264,10 @@ class Calendar {
         
         switch(dataType) {
             case "month":
-                if (typeof data === vtype && data >= 0 && data <= 11) return data;
+                if (typeof data === vtype && !(data < 0 && data > 11)) return data;
                 throw new TypeError(`Invalid month: ${data}!`);
             case "year":
-                if (typeof data === vtype && data >= 1000 && data <= 9999) return data;
+                if (typeof data === vtype && !(data < 1000 && data > 9999)) return data;
                 throw new TypeError(`Invalid year: ${data}!`);
             default:
                 throw new Error("Invalid type");

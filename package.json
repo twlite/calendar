@@ -1,6 +1,6 @@
 {
   "name": "node-calendar-js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Simple JavaScript calendar library.",
   "main": "build/mod.js",
   "types": "build/mod.d.ts",
@@ -16,7 +16,8 @@
     "calender",
     "calendar.js",
     "calendar-js",
-    "node-calendar"
+    "node-calendar",
+    "html-calendar"
   ],
   "author": "Snowflake107",
   "license": "MIT",
