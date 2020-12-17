@@ -9,6 +9,6 @@
 		"outDir": "./build/"
 	},
 	"files": [
-		"mod.ts"
+		"index.ts"
 	]
 }

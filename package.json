@@ -1,9 +1,9 @@
 {
   "name": "node-calendar-js",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Simple JavaScript calendar library.",
-  "main": "build/mod.js",
-  "types": "build/mod.d.ts",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
     "test": "cd test && node index.js"
   },
@@ -24,5 +24,11 @@
   "bugs": {
     "url": "https://github.com/DevSnowflake/calendar/issues"
   },
-  "homepage": "https://github.com/DevSnowflake/calendar#readme"
+  "homepage": "https://github.com/DevSnowflake/calendar#readme",
+  "dependencies": {
+    "table": "^6.0.4"
+  },
+  "devDependencies": {
+    "@types/table": "^6.0.0"
+  }
 }
